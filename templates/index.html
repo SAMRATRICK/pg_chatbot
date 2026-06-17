@@ -3,40 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quanta — PG Assistant</title>
+  <title>StayPoint — PG Assistant</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
   <style>
-    /* ── Reset & base ─────────────────────────────────────────────────── */
+    /* ── Reset & Base ─────────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:         #0f0f13;
-      --surface:    #1a1a22;
-      --surface2:   #22222e;
-      --border:     rgba(255,255,255,0.07);
-      --accent:     #7c6ff7;
-      --accent2:    #a78bfa;
-      --user-bg:    #7c6ff7;
-      --bot-bg:     #1e1e2a;
-      --text:       #e8e8f0;
-      --text-dim:   #8888a4;
-      --green:      #4ade80;
-      --red:        #f87171;
-      --radius:     16px;
-      --radius-sm:  10px;
-      --shadow:     0 8px 32px rgba(0,0,0,0.4);
+      /* Brand Constants */
+      --ink: #15170F;
+      --paper: #F4F1EA;
+      --panel: #FBFAF5;
+      --green: #4F7B1E;
+      --lime: #C7F04A;
+      --line: rgba(21, 23, 15, 0.12);
+      
+      /* Typography Fallbacks */
+      --font-display: 'Inter', system-ui, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
 
     html, body {
       height: 100%;
-      background: var(--bg);
-      font-family: 'Inter', system-ui, sans-serif;
-      color: var(--text);
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-display);
       overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Brand Typography Classes */
+    .ff-display { font-family: var(--font-display); font-optical-sizing: auto; }
+    .ff-mono { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.1em; }
+
+    /* Grain Texture */
+    .grain {
+      background-image: radial-gradient(rgba(79, 123, 30, 0.08) 0.5px, transparent 0.5px);
+      background-size: 18px 18px;
     }
 
     /* ── Layout shell ─────────────────────────────────────────────────── */
@@ -46,6 +53,9 @@
       height: 100vh;
       max-width: 860px;
       margin: 0 auto;
+      background: var(--paper);
+      border-left: 1px solid var(--line);
+      border-right: 1px solid var(--line);
     }
 
     /* ── Header ───────────────────────────────────────────────────────── */
@@ -53,9 +63,9 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 18px 24px;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel);
       flex-shrink: 0;
     }
 
@@ -68,8 +78,8 @@
     .brand-icon {
       width: 40px;
       height: 40px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--accent), #c084fc);
+      /* background: var(--ink); */
+      color: var(--paper);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -78,16 +88,14 @@
     }
 
     .brand-text h1 {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.3px;
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
     }
 
     .brand-text p {
-      font-size: 0.75rem;
-      color: var(--text-dim);
-      margin-top: 1px;
+      font-size: 0.65rem;
+      color: #6B6A5C;
     }
 
     /* ── Quick chips ──────────────────────────────────────────────────── */
@@ -96,8 +104,8 @@
       gap: 8px;
       padding: 14px 24px;
       overflow-x: auto;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
       flex-shrink: 0;
       scrollbar-width: none;
     }
@@ -105,22 +113,19 @@
 
     .chip {
       white-space: nowrap;
-      font-size: 0.76rem;
-      font-weight: 500;
-      padding: 6px 12px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: var(--surface2);
-      color: var(--text-dim);
+      font-size: 0.65rem;
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--ink);
       cursor: pointer;
       transition: all 0.2s;
       flex-shrink: 0;
     }
 
     .chip:hover {
-      border-color: var(--accent);
-      color: var(--accent2);
-      background: rgba(124, 111, 247, 0.1);
+      background: var(--ink);
+      color: var(--paper);
     }
 
     /* ── Messages area ────────────────────────────────────────────────── */
@@ -130,20 +135,17 @@
       padding: 24px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 24px;
       scrollbar-width: thin;
-      scrollbar-color: rgba(255,255,255,0.08) transparent;
+      scrollbar-color: var(--line) transparent;
     }
     .messages::-webkit-scrollbar { width: 4px; }
-    .messages::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.08);
-      border-radius: 4px;
-    }
+    .messages::-webkit-scrollbar-thumb { background: var(--line); }
 
     /* ── Message rows ─────────────────────────────────────────────────── */
     .msg-row {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       align-items: flex-end;
       animation: fadeUp 0.25s ease-out both;
     }
@@ -156,79 +158,70 @@
 
     /* Avatars */
     .avatar {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
+      width: 32px;
+      height: 32px;
       flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 0.75rem;
-      font-weight: 600;
       margin-bottom: 4px;
     }
 
-    .avatar.bot {
-      background: linear-gradient(135deg, var(--accent), #c084fc);
-      color: #fff;
-    }
-
-    .avatar.user {
-      background: var(--surface2);
-      color: var(--text-dim);
-      border: 1px solid var(--border);
-    }
+    .avatar.bot {color: var(--paper); }
+    .avatar.user {color: var(--ink); border: 1px solid var(--line); }
 
     /* Bubbles */
     .bubble {
-      max-width: 72%;
-      padding: 14px 18px;
-      border-radius: var(--radius);
+      max-width: 75%;
+      padding: 16px 20px;
       font-size: 0.9rem;
-      line-height: 1.65;
+      line-height: 1.6;
       word-break: break-word;
       position: relative;
     }
 
     .msg-row.bot .bubble {
-      background: var(--bot-bg);
-      border: 1px solid var(--border);
-      border-bottom-left-radius: 4px;
-      color: var(--text);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      color: var(--ink);
     }
 
     .msg-row.user .bubble {
-      background: var(--user-bg);
-      color: #fff;
-      border-bottom-right-radius: 4px;
+      background: var(--ink);
+      color: var(--paper);
     }
 
     /* Markdown-like formatting inside bot bubbles */
-    .bubble strong { font-weight: 600; color: var(--accent2); }
-    .bubble em { font-style: italic; color: var(--text-dim); }
+    .bubble strong { font-weight: 600; }
+    .bubble em { font-style: italic; color: #6B6A5C; }
     .bubble .sep {
       border: none;
-      border-top: 1px solid var(--border);
-      margin: 12px 0;
+      border-top: 1px solid var(--line);
+      margin: 16px 0;
     }
 
     .bubble .pg-card {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 12px 14px;
-      margin-top: 10px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 16px;
+      margin-top: 12px;
       font-size: 0.85rem;
-      line-height: 1.7;
+      line-height: 1.6;
+      transition: transform 0.2s;
+    }
+    
+    .bubble .pg-card:hover {
+      transform: translateY(-2px);
     }
 
-    .bubble .pg-card + .pg-card { margin-top: 8px; }
+    .bubble .pg-card + .pg-card { margin-top: 12px; }
 
     .bubble .pg-name {
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: var(--accent2);
+      font-weight: 500;
+      font-size: 1.1rem;
       margin-bottom: 4px;
+      letter-spacing: -0.01em;
     }
 
     .bubble .pg-row {
@@ -236,79 +229,76 @@
       gap: 6px;
       align-items: center;
       flex-wrap: wrap;
-      margin-top: 3px;
+      margin-top: 8px;
     }
 
+    /* Solid Badges matching ExplorePGs */
     .badge {
       display: inline-flex;
       align-items: center;
-      gap: 3px;
-      font-size: 0.7rem;
-      padding: 2px 7px;
-      border-radius: 6px;
-      font-weight: 500;
+      gap: 4px;
+      font-size: 0.65rem;
+      padding: 4px 8px;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
-    .badge.green { background: rgba(74,222,128,0.12); color: var(--green); }
-    .badge.purple { background: rgba(124,111,247,0.15); color: var(--accent2); }
-    .badge.red { background: rgba(248,113,113,0.12); color: var(--red); }
-    .badge.gray { background: var(--surface); color: var(--text-dim); }
-
-    .verified-tick { color: var(--green); font-size: 0.8rem; }
-    .unverified { color: var(--text-dim); font-size: 0.75rem; }
+    .badge.green { background: var(--green); color: var(--paper); }
+    .badge.ink { background: var(--ink); color: var(--paper); }
+    .badge.red { background: #D94040; color: var(--paper); }
+    .badge.gray { background: #EAE8DF; color: #6B6A5C; }
 
     /* Typing indicator */
     .typing-indicator {
       display: flex;
-      gap: 5px;
+      gap: 4px;
       align-items: center;
-      padding: 14px 18px;
+      padding: 8px 4px;
     }
     .typing-indicator span {
       width: 6px;
       height: 6px;
-      border-radius: 50%;
-      background: var(--text-dim);
+      background: #6B6A5C;
       animation: bounce 1.2s infinite;
     }
     .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
     .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
     @keyframes bounce {
       0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
-      40%           { transform: translateY(-6px); opacity: 1; }
+      40%           { transform: translateY(-4px); opacity: 1; }
     }
 
     /* Timestamp */
     .ts {
-      font-size: 0.65rem;
-      color: var(--text-dim);
-      margin-top: 4px;
-      padding: 0 4px;
+      font-size: 0.6rem;
+      color: #6B6A5C;
+      margin-top: 6px;
+      padding: 0 2px;
       text-align: right;
+      font-family: var(--font-mono);
     }
     .msg-row.bot .ts { text-align: left; }
 
     /* ── Input area ───────────────────────────────────────────────────── */
     .input-area {
-      padding: 16px 24px 20px;
-      border-top: 1px solid var(--border);
-      background: var(--surface);
+      padding: 20px 24px;
+      border-top: 1px solid var(--line);
+      background: var(--panel);
       flex-shrink: 0;
     }
 
     .input-row {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       align-items: flex-end;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 10px 10px 10px 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 8px 8px 8px 16px;
       transition: border-color 0.2s;
     }
 
     .input-row:focus-within {
-      border-color: rgba(124, 111, 247, 0.4);
-      box-shadow: 0 0 0 3px rgba(124, 111, 247, 0.08);
+      border-color: var(--green);
     }
 
     #msgInput {
@@ -316,36 +306,35 @@
       background: transparent;
       border: none;
       outline: none;
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 0.92rem;
+      color: var(--ink);
+      font-family: var(--font-display);
+      font-size: 0.95rem;
       line-height: 1.5;
       resize: none;
       max-height: 120px;
       overflow-y: auto;
       scrollbar-width: thin;
+      padding: 6px 0;
     }
 
-    #msgInput::placeholder { color: var(--text-dim); }
+    #msgInput::placeholder { color: #9A9684; }
 
     .send-btn {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       border: none;
-      border-radius: 10px;
-      background: var(--accent);
-      color: #fff;
+      background: var(--ink);
+      color: var(--paper);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s;
+      transition: opacity 0.2s;
       flex-shrink: 0;
     }
 
     .send-btn:hover:not(:disabled) {
-      background: var(--accent2);
-      transform: scale(1.04);
+      opacity: 0.85;
     }
 
     .send-btn:disabled {
@@ -357,102 +346,84 @@
 
     /* ── Welcome card ─────────────────────────────────────────────────── */
     .welcome-card {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 32px 24px;
       text-align: center;
-      margin: 8px 0 4px;
+      margin: 16px 0;
     }
 
     .welcome-card .wc-icon {
-      font-size: 2.2rem;
-      margin-bottom: 10px;
+      font-size: 2.5rem;
+      margin-bottom: 16px;
     }
 
     .welcome-card h2 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 6px;
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-bottom: 8px;
     }
 
     .welcome-card p {
-      font-size: 0.82rem;
-      color: var(--text-dim);
+      font-size: 0.85rem;
+      color: #6B6A5C;
       line-height: 1.6;
-    }
-
-    /* ── Language tag on message ─────────────────────────────────────── */
-    .lang-tag {
-      font-size: 0.62rem;
-      background: rgba(124,111,247,0.15);
-      color: var(--accent2);
-      padding: 1px 5px;
-      border-radius: 4px;
-      margin-left: 6px;
-      vertical-align: middle;
     }
 
     /* ── Responsive ───────────────────────────────────────────────────── */
     @media (max-width: 600px) {
-      .messages { padding: 16px; gap: 14px; }
-      .bubble { max-width: 88%; font-size: 0.86rem; }
-      .chips-row { padding: 10px 16px; }
-      .input-area { padding: 12px 16px 16px; }
-      .header { padding: 14px 16px; }
+      .shell { border: none; }
+      .messages { padding: 16px; gap: 16px; }
+      .bubble { max-width: 90%; font-size: 0.85rem; padding: 14px 16px; }
+      .chips-row { padding: 12px 16px; }
+      .input-area { padding: 16px; }
+      .header { padding: 16px; }
     }
   </style>
 </head>
 
-<body>
+<body class="grain">
 <div class="shell">
 
-  <!-- Header -->
-    <header class="header">
+  <header class="header">
     <div class="brand">
-      <div class="brand-icon">🏠</div>
+      <div class="brand-icon"><img src="/p1.svg" alt="Pingo Logo" width="40" height="40"></div>
       <div class="brand-text">
-        <h1>Quanta</h1>
-        <p>StayPoint PG Assistant</p>
+        <h1 class="ff-display">Pingo</h1>
+        <p class="ff-mono uppercase">StayPoint AI Assistant</p>
       </div>
     </div>
   </header>
 
-  <!-- Quick suggestion chips -->
-  <div class="chips-row" id="chipsRow">
+  <div class="chips-row ff-mono" id="chipsRow">
     <button class="chip" onclick="chipSend(this)">PG under ₹6000 with WiFi</button>
     <button class="chip" onclick="chipSend(this)">Best rated PGs in Asansol</button>
     <button class="chip" onclick="chipSend(this)">Girls PG with meals</button>
     <button class="chip" onclick="chipSend(this)">Documents required for PG</button>
     <button class="chip" onclick="chipSend(this)">What is security deposit?</button>
     <button class="chip" onclick="chipSend(this)">PG notice period rules</button>
-    <button class="chip" onclick="chipSend(this)">WiFi wala PG 6000 mein</button>
-    <button class="chip" onclick="chipSend(this)">Meyeder PG dekhao</button>
   </div>
 
-  <!-- Messages -->
   <div class="messages" id="msgList">
 
-    <!-- Welcome card (shown once, removed on first message) -->
     <div class="welcome-card" id="welcomeCard">
-      <div class="wc-icon">🏠</div>
-      <h2>Welcome to Quanta</h2>
+      <div class="wc-icon"><img src="/p1.svg" alt="Pingo Logo" width="60" height="60"></div>
+      <h2 class="ff-display">Hi, I'm Pingo!</h2>
       <p>
-        I'm your dedicated PG assistant for <strong>StayPoint</strong>.<br>
-        Ask me to find PGs in Asansol, or ask about PG rules, documents, deposits, and more.<br><br>
-        <em>Supports English · हिंदी · বাংলা</em>
+        Your dedicated <strong style="color: var(--ink)">StayPoint</strong> AI assistant.<br>
+        Ask me to find PGs in Asansol, or ask about rules, documents, and deposits.<br><br>
+        <span class="ff-mono uppercase" style="font-size: 0.65rem;">Supports English · हिंदी · বাংলা</span>
       </p>
     </div>
 
   </div>
 
-  <!-- Input -->
   <div class="input-area">
     <div class="input-row">
       <textarea
         id="msgInput"
         rows="1"
-        placeholder="Ask about PGs… e.g. 'Girls PG under ₹6000 with WiFi'"
+        placeholder="Ask about PGs… e.g. 'Girls PG under ₹6000'"
         autocomplete="off"
         spellcheck="false"
       ></textarea>
@@ -460,12 +431,9 @@
         <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
       </button>
     </div>
-
   </div>
 
-</div><!-- .shell -->
-
-<script>
+</div><script>
 // ─── State ─────────────────────────────────────────────────────────────────
 const msgList  = document.getElementById('msgList');
 const msgInput = document.getElementById('msgInput');
@@ -511,10 +479,10 @@ function appendUser(text) {
   row.className = 'msg-row user';
   row.innerHTML = `
     <div>
-      <div class="bubble">${escHtml(text)}</div>
+      <div class="bubble ff-display">${escHtml(text)}</div>
       <div class="ts">${nowTime()}</div>
     </div>
-    <div class="avatar user">U</div>
+    <div class="avatar user ff-mono">You</div>
   `;
   msgList.appendChild(row);
   scrollDown();
@@ -526,7 +494,7 @@ function showTyping() {
   row.className = 'msg-row bot';
   row.id = 'typingRow';
   row.innerHTML = `
-    <div class="avatar bot">Q</div>
+    <div class="avatar bot ff-mono"><img src="/p1.svg" alt="Pingo Logo" width="40" height="40"></div>
     <div class="bubble bot-typing">
       <div class="typing-indicator">
         <span></span><span></span><span></span>
@@ -549,7 +517,7 @@ function appendBot(text, pgs) {
   row.className = 'msg-row bot';
 
   const bubbleEl = document.createElement('div');
-  bubbleEl.className = 'bubble';
+  bubbleEl.className = 'bubble ff-display';
 
   if (pgs && pgs.length > 0) {
     // Render lead text
@@ -574,7 +542,7 @@ function appendBot(text, pgs) {
   ts.textContent = nowTime();
   wrapper.appendChild(ts);
 
-  row.innerHTML = `<div class="avatar bot">Q</div>`;
+  row.innerHTML = `<div class="avatar bot ff-mono"><img src="/p1.svg" alt="Pingo Logo" width="40" height="40"></div>`;
   row.appendChild(wrapper);
   msgList.appendChild(row);
   scrollDown();
@@ -597,26 +565,27 @@ function buildPgCard(pg, idx) {
   card.className = 'pg-card';
 
   const verified   = String(pg.Verified || '').toLowerCase().startsWith('y');
-  const wifiBadge  = pg.WiFi  === 'Yes' ? '<span class="badge green">📶 WiFi</span>'  : '<span class="badge gray">No WiFi</span>';
-  const mealsBadge = pg.Meals === 'Yes' ? '<span class="badge green">🍽 Meals</span>' : '<span class="badge gray">No Meals</span>';
-  const acBadge    = pg.AC    === 'Yes' ? '<span class="badge purple">❄️ AC</span>'    : '';
+  const wifiBadge  = pg.WiFi  === 'Yes' ? '<span class="badge gray">WiFi</span>'  : '';
+  const mealsBadge = pg.Meals === 'Yes' ? '<span class="badge gray">Meals</span>' : '';
+  const acBadge    = pg.AC    === 'Yes' ? '<span class="badge gray">AC</span>'    : '';
+  
   const vBadge     = verified
-    ? '<span class="badge green">✅ Verified</span>'
-    : '<span class="badge gray">Unverified</span>';
+    ? '<span class="badge green">Verified</span>'
+    : '<span class="badge red">Unverified</span>';
 
   card.innerHTML = `
-    <div class="pg-name">${idx}. ${escHtml(pg.PG_Name || 'PG')}</div>
-    <div style="font-size:0.78rem;color:var(--text-dim);margin-bottom:6px">📍 ${escHtml(pg.Address || 'Asansol')}</div>
+    <div class="pg-name ff-display">${idx}. ${escHtml(pg.PG_Name || 'PG')}</div>
+    <div class="ff-mono" style="font-size:0.65rem;color:#6B6A5C;margin-bottom:10px;text-transform:uppercase;">📍 ${escHtml(pg.Address || 'Asansol')}</div>
     <div class="pg-row">
-      <span class="badge purple">💰 ₹${pg.Rent || 'N/A'}/mo</span>
-      <span class="badge purple">⭐ ${pg.Rating || 'N/A'}</span>
-      <span class="badge gray">📏 ${pg.Distance_km || 'N/A'} km</span>
-      <span class="badge gray">👤 ${pg.Gender_Preference || 'Any'}</span>
+      <span class="badge ink">₹${pg.Rent || 'N/A'}/mo</span>
+      <span class="badge gray">⭐ ${pg.Rating || 'N/A'}</span>
+      <span class="badge gray">${pg.Distance_km || 'N/A'} km</span>
+      <span class="badge gray">${pg.Gender_Preference || 'Any'}</span>
     </div>
     <div class="pg-row" style="margin-top:6px">
-      ${wifiBadge} ${mealsBadge} ${acBadge} ${vBadge}
+      ${vBadge} ${wifiBadge} ${mealsBadge} ${acBadge}
     </div>
-    <div style="font-size:0.76rem;color:var(--text-dim);margin-top:6px">📞 ${escHtml(String(pg.Contact || 'N/A'))}</div>
+    <div class="ff-mono" style="font-size:0.65rem;color:var(--ink);margin-top:12px;text-transform:uppercase;">📞 Contact: ${escHtml(String(pg.Contact || 'N/A'))}</div>
   `;
   return card;
 }
@@ -643,7 +612,7 @@ async function sendMessage() {
     const data = await res.json();
     appendBot(data.answer || 'Sorry, no response.', data.pgs || []);
   } catch {
-    appendBot('⚠️ Connection error. Please try again.', []);
+    appendBot('Connection error. Please try again.', []);
   } finally {
     isTyping = false;
     sendBtn.disabled = false;
